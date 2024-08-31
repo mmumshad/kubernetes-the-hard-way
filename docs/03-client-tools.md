@@ -50,7 +50,7 @@ Number of key(s) added: 1
 Verify connection
 
 ```
-ssh controlplane01
+ssh loadbalancer
 exit
 
 ssh controlplane02
