@@ -80,12 +80,15 @@ chmod +x $scripts/update-hosts.sh
 # Detect architecture and store in a var
 uarch=$(uname -i)
 
-case $uarch in 
+case $uarch in
     x86_64)
         arch=amd64
         ;;
+    aarch64)
+        arch=arm64
+        ;;
     *)
-        echo "Unsupported archtecture $uarch"
+        echo "setup_hosts.sh: Unsupported architecture $uarch"
         exit 1
         ;;
 esac
