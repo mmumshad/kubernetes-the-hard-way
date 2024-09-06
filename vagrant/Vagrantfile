@@ -44,18 +44,18 @@ VIRTUAL_MACHINES = [
     memory: [ram_selector * 64, 1024].min(),
     box: Hypervisor.ubuntu,
   },
-#   {
-#     name: "node01",
-#     cpu: (((h.cpu_count / 4) * 4) - 4) / 4,
-#     memory: [ram_selector * 128, 4096].min(),
-#     box: Hypervisor.ubuntu,
-#   },
-#   {
-#     name: "node02",
-#     cpu: (((h.cpu_count / 4) * 4) - 4) / 4,
-#     memory: [ram_selector * 128, 4096].min(),
-#     box: Hypervisor.ubuntu,
-#   },
+  {
+    name: "node01",
+    cpu: (((h.cpu_count / 4) * 4) - 4) / 4,
+    memory: [ram_selector * 128, 4096].min(),
+    box: Hypervisor.ubuntu,
+  },
+  {
+    name: "node02",
+    cpu: (((h.cpu_count / 4) * 4) - 4) / 4,
+    memory: [ram_selector * 128, 4096].min(),
+    box: Hypervisor.ubuntu,
+  },
 ]
 
 # Deploy the VMs
