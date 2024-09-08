@@ -25,7 +25,7 @@ Clone this repo down to your Mac. Open your Mac's terminal application. All comm
     mkdir ~/kodekloud
     cd ~/kodekloud
     git clone https://github.com/mmumshad/kubernetes-the-hard-way.git
-    cd kubernetes-the-hard-way/apple-silicon
+    cd kubernetes-the-hard-way/vagrant
     ```
 
 ## Virtual Machine Network
@@ -55,10 +55,12 @@ If you do decide to change any of these, please treat as personal preference and
 
 To set up as per the image above, do the following in iterm2
 1. Right click and select split pane horizontally
-1. In each pane, connect to a different node with `Multipass shell`
-1. From the `Session` menu at the top, toggle `Broadcast` -> `Broadcast input to all panes` (or press `ALT`-`CMD`-`I`). The small icon at the top right of each pane indicates broadcast mode is enabled.
+1. In each pane, connect to a different node with `vagrant ssh`
+1. Enable braodcast
+    * v3.4: From the `Session` menu at the top, toggle `Broadcast` -> `Broadcast input to all panes` (or press `ALT`-`CMD`-`I`). The small icon at the top right of each pane indicates broadcast mode is enabled.
+    * v3.5: `Broadcast` is now on the `Shell` menu and the hotkey is `CMD`-`SHIFT`-`I`
 
-Input typed or passed to one command prompt will be echoed to the others. Remember to turn off broadcast when you have finished a section that applies to multiple nodes.
+Input typed or passed to one command prompt will be echoed to the others. Remember to turn off broadcast when you have finished a section that applies to multiple nodes, or you will royally break things and have to delete the VMs and start over!
 
 Next: [Compute Resources](02-compute-resources.md)
 

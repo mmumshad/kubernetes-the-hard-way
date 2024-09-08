@@ -43,8 +43,14 @@ We will be building the following:
 * Two worker nodes (`node01` and `node02`)
 * One loadbalancer VM running [HAProxy](https://www.haproxy.org/) to balance requests between the two API servers and provide the endpoint for your KUBECONFIG.
 
+In this lab we will go directly to Vagrant to automate the deployment of VMs in a host platform independent manner, that is, the code here will work for all types of laptops in exactly the same way once the correct prerequisites have been installed.
+
+Note that the [Vagrantfile](vagrant/Vagrantfile) we will use is quite different to what is discussed in any of the course videos. Vagrantfiles are written in the Ruby programming language, therefore any valid Ruby syntax can be used and we take advantage of this fact to make a Vagrantfile that is compatible with all the different types of laptop, and the fact that the laptops can't all use VirtualBox - we must use VMware on Apple Silicon because VirtualBox doesn't work.
+
+Note also that you should not edit the Vagrantfile except in the places suggested in further documents in this lab unless you have a very good understanding of how Vagrant works and of the Ruby programming language, or you will break the deployment! It is specially tuned to make the best use of the CPU and memory resources available on your laptop, dynamcially adjusting the vCPU and RAM of the VMs being created.
+
 ## Getting Started
 
 * If you are using Windows or Intel Mac, start [here](./VirtualBox/docs/01-prerequisites.md) to deploy VirtualBox and Vagrant.
-* If you are using Apple Silicon Mac (M1/M2/M3), start [here](./apple-silicon/docs/01-prerequisites.md) to deploy Multipass.
+* If you are using Apple Silicon Mac (M1/M2/M3), start [here](./apple-silicon/docs/01-prerequisites.md) to deploy VMware Fusion and Vagrant.
 
