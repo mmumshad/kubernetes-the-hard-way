@@ -1,0 +1,143 @@
+# -*- mode: ruby -*-
+# vi:set ft=ruby sw=2 ts=2 sts=2:
+
+# Define how much memory your computer has in GB (e.g. 8, 16)
+# Larger nodes will be created if you have more.
+RAM_SIZE = 16
+
+# Define how mnay CPU cores you have.
+# More powerful workers will be created if you have more
+CPU_CORES = 8
+
+# Internal network prefix for the VM network
+# See the documentation before changing this
+IP_NW = "192.168.56."
+
+# Calculate resource amounts
+# based on RAM/CPU
+ram_selector = (RAM_SIZE / 4) * 4
+if ram_selector < 8
+  raise "Unsufficient memory #{RAM_SIZE}GB. min 8GB"
+end
+RESOURCES = {
+  "control" => {
+    1 => {
+      # controlplane01 bigger since it may run e2e tests.
+      "ram" => [ram_selector * 128, 2048].max(),
+      "cpu" => CPU_CORES >= 12 ? 4 : 2,
+    },
+    2 => {
+      # All additional masters get this
+      "ram" => [ram_selector * 128, 2048].min(),
+      "cpu" => CPU_CORES > 8 ? 2 : 1,
+    },
+  },
+  "worker" => {
+    "ram" => [ram_selector * 128, 4096].min(),
+    "cpu" => (((CPU_CORES / 4) * 4) - 4) / 4,
+  },
+}
+
+# Sets up hosts file and DNS
+def setup_dns(node)
+  # Set up /etc/hosts
+  node.vm.provision "setup-hosts", :type => "shell", :path => "ubuntu/vagrant/setup-hosts.sh" do |s|
+    s.args = ["enp0s8", node.vm.hostname]
+  end
+  # Set up DNS resolution
+  node.vm.provision "setup-dns", type: "shell", :path => "ubuntu/update-dns.sh"
+end
+
+# Runs provisioning steps that are required by masters and workers
+def provision_kubernetes_node(node)
+  # Set up kernel parameters, modules and tunables
+  node.vm.provision "setup-kernel", :type => "shell", :path => "ubuntu/setup-kernel.sh"
+  # Set up ssh
+  node.vm.provision "setup-ssh", :type => "shell", :path => "ubuntu/ssh.sh"
+  # Set up DNS
+  setup_dns node
+  # Install cert verification script
+  node.vm.provision "shell", inline: "ln -s /vagrant/ubuntu/cert_verify.sh /home/vagrant/cert_verify.sh"
+end
+
+# Define the number of master and worker nodes. You should not change this
+NUM_CONTROL_NODES = 2
+NUM_WORKER_NODE = 2
+
+# Host address start points
+MASTER_IP_START = 10
+NODE_IP_START = 20
+LB_IP_START = 30
+
+# All Vagrant configuration is done below. The "2" in Vagrant.configure
+# configures the configuration version (we support older styles for
+# backwards compatibility). Please don't change it unless you know what
+# you're doing.
+Vagrant.configure("2") do |config|
+  # The most common configuration options are documented and commented below.
+  # For a complete reference, please see the online documentation at
+  # https://docs.vagrantup.com.
+
+  # Every Vagrant development environment requires a box. You can search for
+  # boxes at https://vagrantcloud.com/search.
+  # config.vm.box = "base"
+  config.vm.box = "ubuntu/jammy64"
+  config.vm.boot_timeout = 900
+
+  # Disable automatic box update checking. If you disable this, then
+  # boxes will only be checked for updates when the user runs
+  # `vagrant box outdated`. This is not recommended.
+  config.vm.box_check_update = false
+
+  # Provision Control Nodes
+  (1..NUM_CONTROL_NODES).each do |i|
+    config.vm.define "controlplane0#{i}" do |node|
+      # Name shown in the GUI
+      node.vm.provider "virtualbox" do |vb|
+        vb.name = "kubernetes-ha-controlplane-#{i}"
+        vb.memory = RESOURCES["control"][i > 2 ? 2 : i]["ram"]
+        vb.cpus = RESOURCES["control"][i > 2 ? 2 : i]["cpu"]
+      end
+      node.vm.hostname = "controlplane0#{i}"
+      node.vm.network :private_network, ip: IP_NW + "#{MASTER_IP_START + i}"
+      node.vm.network "forwarded_port", guest: 22, host: "#{2710 + i}"
+      provision_kubernetes_node node
+      if i == 1
+        # Install (opinionated) configs for vim and tmux on controlplane01. These used by the author for CKA exam.
+        node.vm.provision "file", source: "./ubuntu/tmux.conf", destination: "$HOME/.tmux.conf"
+        node.vm.provision "file", source: "./ubuntu/vimrc", destination: "$HOME/.vimrc"
+        node.vm.provision "file", source: "../tools/approve-csr.sh", destination: "$HOME/approve-csr.sh"
+      end
+    end
+  end
+
+  # Provision Load Balancer Node
+  config.vm.define "loadbalancer" do |node|
+    node.vm.provider "virtualbox" do |vb|
+      vb.name = "kubernetes-ha-lb"
+      vb.memory = 512
+      vb.cpus = 1
+    end
+    node.vm.hostname = "loadbalancer"
+    node.vm.network :private_network, ip: IP_NW + "#{LB_IP_START}"
+    node.vm.network "forwarded_port", guest: 22, host: 2730
+    # Set up ssh
+    node.vm.provision "setup-ssh", :type => "shell", :path => "ubuntu/ssh.sh"
+    setup_dns node
+  end
+
+  # Provision Worker Nodes
+  (1..NUM_WORKER_NODE).each do |i|
+    config.vm.define "node0#{i}" do |node|
+      node.vm.provider "virtualbox" do |vb|
+        vb.name = "kubernetes-ha-node-#{i}"
+        vb.memory = RESOURCES["worker"]["ram"]
+        vb.cpus = RESOURCES["worker"]["cpu"]
+      end
+      node.vm.hostname = "node0#{i}"
+      node.vm.network :private_network, ip: IP_NW + "#{NODE_IP_START + i}"
+      node.vm.network "forwarded_port", guest: 22, host: "#{2720 + i}"
+      provision_kubernetes_node node
+    end
+  end
+end

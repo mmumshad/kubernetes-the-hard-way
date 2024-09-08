@@ -182,7 +182,6 @@ class Hypervisor
 end
 
 class VMware < Hypervisor
-  # TODO - work out bridging
   def set_hostname(hostname:)
     @@node.vm.provision "set-hostname", type: "shell", inline: "sudo hostnamectl set-hostname #{hostname}"
   end

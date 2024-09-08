@@ -1,6 +1,8 @@
 # Provisioning Compute Resources
 
-Note: You must have VirtualBox and Vagrant configured at this point.
+[//]: # (ignore:)
+
+Note: You must have VirtualBox or VMWare Fusion (depending on your system) and Vagrant configured at this point. This will not work if you have less than 8GB of RAM.
 
 Download this github repository and cd into the vagrant folder:
 
@@ -14,9 +16,6 @@ CD into vagrant directory:
 cd kubernetes-the-hard-way/vagrant
 ```
 
-The `Vagrantfile` is configured to assume you have at least an 8 core CPU which most modern core i5, i7 and i9 do, and at least 16GB RAM. You can tune these values especially if you have *less* than this by editing the `Vagrantfile` before the next step below and adjusting the values for `RAM_SIZE` and `CPU_CORES` accordingly. It is not recommended to change these unless you know what you are doing as it may result in crashes and will make the lab harder to support.
-
-This will not work if you have less than 8GB of RAM.
 
 Run Vagrant up:
 
@@ -24,32 +23,50 @@ Run Vagrant up:
 vagrant up
 ```
 
+This does the following:
 
-This does the below:
+- Deploys 5 VMs - 2 controlplanes, 1 loadbalancer and 2 workers with the following names
+    * `controlplane01`
+    * `controlplane02`
+    * `loadbalancer`
+    * `node01`
+    * `node02`
 
-- Deploys 5 VMs - 2 controlplane, 2 worker and 1 loadbalancer with the name 'kubernetes-ha-* '
-    > This is the default settings. This can be changed at the top of the Vagrant file.
-    > If you choose to change these settings, please also update `vagrant/ubuntu/vagrant/setup-hosts.sh`
-    > to add the additional hosts to the `/etc/hosts` default before running `vagrant up`.
+These have a varying amount of virtual CPU and memory assigned to them according to what is detected on your laptop. The bigger your laptop, the bigger the VMs will be. This is because it's a squeeze to get 5 VMs into 8GB of memory and they may not perform very well. Therefore if you have more, we take advantage of this.
 
-- Set's IP addresses in the range `192.168.56.x`
+Soon after the process starts, it will display a box like this. If you need to raise questions on our forums about the VM installation, you *must* copy this output from your system and include it with your message so we can help you better.
 
-    | VM            |  VM Name               | Purpose       | IP            | Forwarded Port   | RAM  |
-    | ------------  | ---------------------- |:-------------:| -------------:| ----------------:|-----:|
-    | controlplane01      | kubernetes-ha-controlplane01 | Master        | 192.168.56.11 |     2711         | 2048 |
-    | controlplane02      | kubernetes-ha-controlplane02 | Master        | 192.168.56.12 |     2712         | 1024 |
-    | node01      | kubernetes-ha-node01 | Worker        | 192.168.56.21 |     2721         | 512  |
-    | node02      | kubernetes-ha-node02 | Worker        | 192.168.56.22 |     2722         | 1024 |
-    | loadbalancer  | kubernetes-ha-lb       | LoadBalancer  | 192.168.56.30 |     2730         | 1024 |
+```text
+┌─────────────────────────── EXAMPLE ─────────────────────────────────┐
+│ If raising a question on our forums, please include the contents    │
+│ of this box with your question. It will help us to identify issues  │
+│ with your system.                                                   │
+│                                                                     │
+│ Detecting your hardware...                                          │
+│ - System: Microsoft Windows 10 Enterprise                           │
+│ - CPU:    Intel(R) Core(TM) i7-7800X CPU @ 3.50GHz (12 cores)       │
+│ - RAM:    32 GB                                                     │
+└─────────────────────────────────────────────────────────────────────┘
+```
 
-    > These are the default settings. These can be changed in the Vagrant file
+When the process completes successfully, it will display the names of the VMs and their IP addresses on the network (IP addresses will be different for you)
 
-- Add's a DNS entry to each of the nodes to access internet
-    > DNS: 8.8.8.8
+```text
+192.168.0.67 controlplane01
+192.168.0.68 controlplane02
+192.168.0.69 loadbalancer
+192.168.0.70 node01
+192.168.0.71 node02
+```
 
-- Sets required kernel settings for kubernetes networking to function correctly.
+Note that the login credentials for all these machines is
 
-See [Vagrant page](../../vagrant/README.md) for details.
+```
+Username: vagrant
+Password: vagrant
+```
+
+
 
 ## SSH to the nodes
 
@@ -57,26 +74,33 @@ There are two ways to SSH into the nodes:
 
 ### 1. SSH using Vagrant
 
-  From the directory you ran the `vagrant up` command, run `vagrant ssh \<vm\>` for example `vagrant ssh controlplane01`. This is the recommended way.
-  > Note: Use VM field from the above table and not the VM name itself.
+From the directory you ran the `vagrant up` command, run `vagrant ssh <name-of-vm>` for example `vagrant ssh controlplane01`. This is the recommended way.
 
 ### 2. SSH Using SSH Client Tools
 
-Use your favourite SSH terminal tool (putty).
+Use your favourite SSH terminal tool (e.g. putty, MobaXterm etc).
 
-Use the above IP addresses. Username and password-based SSH is disabled by default.
+* BRIDGE Mode (default): Use the IP addresses printed at the end of the deployment and the default port `22`. Username and password-based SSH is disabled by default.
+* NAT Mode: Use IP `127.0.0.1` and the port number output for the VM you want to connect to. You'll find that in the provisioner output for the VM., e.g.:
+
+    ```text
+    ==> controlplane01: Forwarding ports...
+    controlplane01: 22 (guest) => 2222 (host) (adapter 1)
+    ```
+
+    Here you would use port `2222` for `controlplane01`
 
 Vagrant generates a private key for each of these VMs. It is placed under the `.vagrant` folder (in the directory you ran the `vagrant up` command from) at the below path for each VM:
 
-- **Private key path**: `.vagrant/machines/\<machine name\>/virtualbox/private_key`
+- **Private key path**: `.vagrant/machines/<machine name>/<platform>/private_key`
 - **Username/password**: `vagrant/vagrant`
 
+Replace `<machine name>` with the VM name, e.g. `controlplane01` and `<platform>` with `virtualbox` if using Virtual Box, or `wmware_desktop` if using VMware on Apple before running the command.
 
 ## Verify Environment
 
 - Ensure all VMs are up.
-- Ensure VMs are assigned the above IP addresses.
-- Ensure you can SSH into these VMs using the IP and private keys, or `vagrant ssh`.
+- Ensure you can SSH into these VMs either using `vagrant ssh` or the IP and private keys.
 - Ensure the VMs can ping each other.
 
 ## Troubleshooting Tips
@@ -86,29 +110,12 @@ Vagrant generates a private key for each of these VMs. It is placed under the `.
 If any of the VMs failed to provision, or is not configured correct, delete the VM using the command:
 
 ```bash
-vagrant destroy \<vm\>
+vagrant destroy <vm-name>
 ```
 
 Then re-provision. Only the missing VMs will be re-provisioned
 
 ```bash
-vagrant up
-```
-
-
-Sometimes the delete does not delete the folder created for the VM and throws an error similar to this:
-
-VirtualBox error:
-
-    VBoxManage.exe: error: Could not rename the directory 'D:\VirtualBox VMs\ubuntu-bionic-18.04-cloudimg-20190122_1552891552601_76806' to 'D:\VirtualBox VMs\kubernetes-ha-node02' to save the settings file (VERR_ALREADY_EXISTS)
-    VBoxManage.exe: error: Details: code E_FAIL (0x80004005), component SessionMachine, interface IMachine, callee IUnknown
-    VBoxManage.exe: error: Context: "SaveSettings()" at line 3105 of file VBoxManageModifyVM.cpp
-
-In such cases delete the VM, then delete the VM folder and then re-provision, e.g.
-
-```bash
-vagrant destroy node02
-rmdir "\<path-to-vm-folder\>\kubernetes-ha-node02
 vagrant up
 ```
 
@@ -118,7 +125,7 @@ This will most likely happen at "Waiting for machine to reboot"
 
 1. Hit `CTRL+C`
 1. Kill any running `ruby` process, or Vagrant will complain.
-1. Destroy the VM that got stuck: `vagrant destroy \<vm\>`
+1. Destroy the VM that got stuck: `vagrant destroy <name-of-vm>`
 1. Re-provision. It will pick up where it left off: `vagrant up`
 
 # Pausing the Environment
