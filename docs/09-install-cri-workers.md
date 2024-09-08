@@ -11,8 +11,43 @@ The commands in this lab must be run on each worker instance: `node01`, and `nod
 Here we will install the container runtime `containerd` from the Ubuntu distribution, and kubectl plus the CNI tools from the Kubernetes distribution. Kubectl is required on `node02` to initialize kubeconfig files for the worker-node auto registration.
 
 [//]: # (host:node01-node02)
+[//]: # (command:/vagrant/files/swapoff.sh)
 
 You can perform this step with [tmux](01-prerequisites.md#running-commands-in-parallel-with-tmux).
+
+1. Check if swap is enabled, and disable it if it is
+
+    1. Run the following
+
+        ```
+        sudo swapon -s
+        ```
+
+        Output (if any) looks like this:
+
+        ```
+        Filename    Type   Size     Used   Priority
+        /swap.img   file   2097148	264    -2
+        ```
+
+        Note the filename.
+
+        If there is no output from the `swapon` command, then swap is already disabled. Proceed to step 2 (install packages)
+
+    1. Disable swap now
+
+        ```
+        sudo swapoff -a
+        ```
+
+    1. Make the change permanent
+
+        ```
+        sudo vi /etc/fstab
+        ```
+
+        Find lines beginning with the filename(s) noted above. Delete any such lines. Save and exit vi.
+
 
 1. Update the apt package index and install packages needed to use the Kubernetes apt repository:
     ```bash
