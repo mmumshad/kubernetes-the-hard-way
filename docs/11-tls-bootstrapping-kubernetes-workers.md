@@ -467,7 +467,6 @@ At `node02` node, run the following, selecting option 5
 Now, go back to `controlplane01` and approve the pending kubelet-serving certificate
 
 [//]: # (host:controlplane01)
-[//]: # (command:sudo apt install -y jq)
 [//]: # (command:. ./approve-csr.sh)
 
 
