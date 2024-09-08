@@ -5,5 +5,4 @@
 echo "--> Disabling swap"
 sudo swapoff -a
 sudo sed -i '/swap.img/d' /etc/fstab
-echo "--> Disabling swap"
 echo "--> Done"
