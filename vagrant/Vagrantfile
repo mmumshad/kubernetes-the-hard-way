@@ -7,7 +7,7 @@ require_relative "./host"
 
 # Define network that the virtual machines will join.
 NETWORK_SETTINGS = {
-  network_type: "NAT",              # NAT = use a private network; BRIDGE = use addresses from your broadband router's network.
+  network_type: "BRIDGE",              # NAT = use a private network; BRIDGE = use addresses from your broadband router's network.
   private_network: "192.168.56.",   # Network prefix for VM network if using NAT mode. Ignored for BRIDGE.
   ip_start: 11,                     # First IP to use for VMs on private network if using NAT mode. Ignored for BRIDGE.
 }
