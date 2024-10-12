@@ -215,6 +215,7 @@ ExecStart=/usr/local/bin/kubelet \\
   --config=/var/lib/kubelet/kubelet-config.yaml \\
   --kubeconfig=/var/lib/kubelet/kubelet.kubeconfig \\
   --node-ip=${PRIMARY_IP} \\
+  --fail-swap-on=false \\
   --v=2
 Restart=on-failure
 RestartSec=5
