@@ -375,6 +375,7 @@ ExecStart=/usr/local/bin/kubelet \\
   --kubeconfig=/var/lib/kubelet/kubeconfig \\
   --cert-dir=/var/lib/kubelet/pki/ \\
   --node-ip=${PRIMARY_IP} \\
+  --fail-swap-on=false \\
   --v=2
 Restart=on-failure
 RestartSec=5
