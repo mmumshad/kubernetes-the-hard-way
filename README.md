@@ -2,11 +2,13 @@
 
 Updated: March 2024
 
-This tutorial walks you through setting up Kubernetes the hard way on a local machine using a hypervisor.
+Understanding of this lab is *not* required to pass the CKA. It is outside the scope of the exam.
+
+This tutorial walks you through setting up Kubernetes the hard way on a local machine using a hypervisor and using the individual service components and certificates to build a controlplane.
 This guide is not for people looking for a fully automated command to bring up a Kubernetes cluster.
 If that's you then check out [Google Kubernetes Engine](https://cloud.google.com/kubernetes-engine), or the [Getting Started Guides](http://kubernetes.io/docs/getting-started-guides/).
 
-Kubernetes The Hard Way is optimized for learning, which means taking the long route to ensure you understand each task required to bootstrap a Kubernetes cluster. Note that the cluster when built will not be accessible from your laptop browser - that isn't what this is about. If you want a more useable cluster, try [one of these](https://github.com/kodekloudhub/certified-kubernetes-administrator-course/tree/master/kubeadm-clusters).
+Kubernetes The Hard Way is optimized for learning, which means taking the long route to ensure you understand each task required to bootstrap a Kubernetes cluster.
 
 This tutorial is a modified version of the original developed by [Kelsey Hightower](https://github.com/kelseyhightower/kubernetes-the-hard-way).
 While the original one uses GCP as the platform to deploy kubernetes,  we use a hypervisor to deploy a cluster on a local machine. If you prefer the cloud version, refer to the original one [here](https://github.com/kelseyhightower/kubernetes-the-hard-way)
@@ -17,7 +19,7 @@ The results of this tutorial should *not* be viewed as production ready, and may
 
 Please note that with this particular challenge, it is all about the minute detail. If you miss _one tiny step_ anywhere along the way, it's going to break!
 
-Note also that in developing this lab, it has been tested *many many* times! Once you have the VMs up and you start to build the cluster, if at any point something isn't working it is 99.9999% likely to be because you missed something, not a bug in the lab!
+Note also that in developing this lab, it has been tested *many many* times! See [how we test it](./docs/99-test.md). Once you have the VMs up and you start to build the cluster, if at any point something isn't working it is 99.9% likely to be because you missed something, not a bug in the lab!
 
 Always run the `cert_verify.sh` script at the places it suggests, and always ensure you are on the correct node when you do stuff. If `cert_verify.sh` shows anything in red, then you have made an error in a previous step. For the controlplane node checks, run the check on `controlplane01` and on `controlplane02`
 

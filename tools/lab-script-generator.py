@@ -23,6 +23,7 @@ from sys import exit
 class State(Enum):
     NONE = 0
     SCRIPT = 1
+    IGNORE = 2
 
 this_file_dir = os.path.dirname(os.path.abspath(__file__))
 docs_path = os.path.abspath(os.path.join(this_file_dir, '../docs'))
@@ -31,7 +32,7 @@ if not os.path.isdir(docs_path):
     print (f'Expected "docs" at: {docs_path}')
     exit(1)
 
-qs_path = os.path.abspath(os.path.join(this_file_dir, '../quick-steps'))
+qs_path = os.path.abspath(os.path.join(this_file_dir, '../vagrant/quick-steps'))
 
 if not os.path.isdir(qs_path):
     os.makedirs(qs_path)
@@ -55,6 +56,7 @@ def write_script(filename: str, script: list):
         f.write(script_open)
         f.write(newline.join(script).encode('utf-8'))
         f.write(script_close)
+    os.chmod(filename, 0o755)
     print(f'-> {path}')
 
 output_file_no = 1
@@ -62,9 +64,6 @@ script = []
 indent = 0
 output_file = None
 for doc in sorted(glob.glob(os.path.join(docs_path, '*.md'))):
-    if 'e2e-tests' in doc:
-        # Skip this for scripted install
-        continue
     print(doc)
     state = State.NONE
     ignore_next_script = False
@@ -72,8 +71,8 @@ for doc in sorted(glob.glob(os.path.join(docs_path, '*.md'))):
     if not m:
         continue
     file_no = m['number']
-    if int(file_no) < 3:
-        continue
+    # if int(file_no) < 3:
+    #     continue
     file_nos.append(file_no)
     section = 0
     script.extend([
@@ -86,6 +85,8 @@ for doc in sorted(glob.glob(os.path.join(docs_path, '*.md'))):
     ])
     with codecs.open(doc, "r", encoding='utf-8') as f:
         for line in f.readlines():
+            if state == State.IGNORE:
+                continue
             line = line.rstrip()
             if state == State.NONE:
                 m = comment_rx.search(line)
@@ -131,6 +132,10 @@ for doc in sorted(glob.glob(os.path.join(docs_path, '*.md'))):
                             '#######################################################################',
                             newline
                         ])
+                    elif token == 'ignore':
+                        if state != State.NONE:
+                            raise Exception("Can't ignore while a script is being parsed!")
+                        state = State.IGNORE
                 elif script_begin_rx.match(line):
                     m = script_begin_rx.match(line)
                     indent = len(m['indent'])

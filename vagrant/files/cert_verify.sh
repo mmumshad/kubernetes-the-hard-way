@@ -170,6 +170,8 @@ check_cert_only()
 
 check_cert_adminkubeconfig()
 {
+    # TODO Verify users section exists ad is not "users: null" first.
+    # TODO reduce cyclomatic complexity
     if [ -z $ADMINKUBECONFIG ]
         then
             printf "${FAILED}please specify admin kubeconfig location\n${NC}"

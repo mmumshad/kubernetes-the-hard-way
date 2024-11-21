@@ -17,7 +17,7 @@ cd kubernetes-the-hard-way/vagrant
 ```
 
 
-Run Vagrant up:
+Run Vagrant up. Note that on some systems vagrant takes a few seconds to start up and begin producing output.
 
 ```bash
 vagrant up

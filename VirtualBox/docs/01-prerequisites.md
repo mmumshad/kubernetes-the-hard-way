@@ -88,4 +88,4 @@ Additionally edit line 164 of [coredns.yaml](../../deployments/coredns.yaml) to 
 
 > Enable synchronize-panes by pressing `CTRL+B` followed by `"` to split the window into two panes. In each pane (selectable with mouse), ssh to the host(s) you will be working with.</br>Next type `CTRL+X` at the prompt to begin sync. In sync mode, the dividing line between panes will be red. Everything you type or paste in one pane will be echoed in the other.<br>To disable synchronization type `CTRL+X` again.</br></br>Note that the `CTRL-X` key binding is provided by a `.tmux.conf` loaded onto the VM by the vagrant provisioner.
 
-Next: [Compute Resources](02-compute-resources.md)
+Next: [Compute Resources](../../docs/02-compute-resources.md)

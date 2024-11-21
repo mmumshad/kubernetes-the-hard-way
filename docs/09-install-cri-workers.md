@@ -12,6 +12,7 @@ Here we will install the container runtime `containerd` from the Ubuntu distribu
 
 [//]: # (host:node01-node02)
 [//]: # (command:/vagrant/files/swapoff.sh)
+[//]: # (command:export DEBIAN_FRONTEND=noninteractive)
 
 You can perform this step with [tmux](01-prerequisites.md#running-commands-in-parallel-with-tmux).
 

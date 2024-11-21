@@ -11,8 +11,9 @@ Here we create an SSH key pair for the user who we are logged in as (this is `va
 Generate SSH key pair on `controlplane01` node:
 
 [//]: # (host:controlplane01)
+[//]: # (command:ssh-keygen -t rsa -N '' -f ~/.ssh/id_rsa <<<y)
 
-```bash
+```
 ssh-keygen
 ```
 

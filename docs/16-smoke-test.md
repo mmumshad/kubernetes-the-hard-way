@@ -89,7 +89,7 @@ Create a service to expose deployment nginx on node ports.
 kubectl expose deploy nginx --type=NodePort --port 80
 ```
 
-[//]: # (command:sleep 2)
+[//]: # (command:sleep 5)
 
 ```bash
 PORT_NUMBER=$(kubectl get svc -l app=nginx -o jsonpath="{.items[0].spec.ports[0].nodePort}")

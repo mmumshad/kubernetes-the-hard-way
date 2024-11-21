@@ -271,6 +271,7 @@ A NLB operates at [layer 4](https://en.wikipedia.org/wiki/OSI_model#Layer_4:_Tra
 Login to `loadbalancer` instance using `vagrant ssh` (or `multipass shell` on Apple Silicon).
 
 [//]: # (host:loadbalancer)
+[//]: # (command:export DEBIAN_FRONTEND=noninteractive)
 
 
 ```bash

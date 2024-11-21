@@ -120,7 +120,7 @@ EOF
 
 List the etcd cluster members.
 
-After running the above commands on both controlplane nodes, run the following on either or both of `controlplane01` and `controlplane02`
+After running the above commands on *both* controlplane nodes, run the following on either or both of `controlplane01` and `controlplane02`
 
 ```bash
 sudo ETCDCTL_API=3 etcdctl member list \
@@ -130,7 +130,7 @@ sudo ETCDCTL_API=3 etcdctl member list \
   --key=/etc/etcd/etcd-server.key
 ```
 
-Output will be similar to this
+Output will be similar to this:
 
 ```
 45bf9ccad8d8900a, started, controlplane02, https://192.168.56.12:2380, https://192.168.56.12:2379
