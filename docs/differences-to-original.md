@@ -1,6 +1,6 @@
 # Differences between original and this solution
 
-* Platform: I use VirtualBox to setup a local cluster, the original one uses GCP.
+* Platform: I use VirtualBox to setup a local cluster, the original one uses ARM64 computers/VMs.
 * Nodes: 2 controlplane and 2 worker vs 2 controlplane and 3 worker nodes.
 * Configure 1 worker node normally and the second one with TLS bootstrap.
 * Node names: I use node01 node02 instead of worker-0 worker-1.
