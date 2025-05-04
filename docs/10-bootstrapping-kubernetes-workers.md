@@ -3,7 +3,7 @@
 In this lab you will bootstrap 2 Kubernetes worker nodes. We already installed `containerd` and its dependencies on these nodes in the previous lab.
 
 We will now install the kubernetes components
-- [kubelet](https://kubernetes.io/docs/admin/kubelet)
+- [kubelet](https://kubernetes.io/docs/reference/command-line-tools-reference/kubelet/)
 - [kube-proxy](https://kubernetes.io/docs/concepts/cluster-administration/proxies).
 
 ## Prerequisites
