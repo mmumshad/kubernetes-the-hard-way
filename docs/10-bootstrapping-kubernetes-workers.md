@@ -3,7 +3,7 @@
 In this lab you will bootstrap 2 Kubernetes worker nodes. We already installed `containerd` and its dependencies on these nodes in the previous lab.
 
 We will now install the kubernetes components
-- [kubelet](https://kubernetes.io/docs/admin/kubelet)
+- [kubelet](https://kubernetes.io/docs/reference/command-line-tools-reference/kubelet/)
 - [kube-proxy](https://kubernetes.io/docs/concepts/cluster-administration/proxies).
 
 ## Prerequisites
@@ -13,7 +13,7 @@ Once this is done, the commands are to be run on first worker instance: `node01`
 
 ### Provisioning Kubelet Client Certificates
 
-Kubernetes uses a [special-purpose authorization mode](https://kubernetes.io/docs/admin/authorization/node/) called Node Authorizer, that specifically authorizes API requests made by [Kubelets](https://kubernetes.io/docs/concepts/overview/components/#kubelet). In order to be authorized by the Node Authorizer, Kubelets must use a credential that identifies them as being in the `system:nodes` group, with a username of `system:node:<nodeName>`. In this section you will create a certificate for each Kubernetes worker node that meets the Node Authorizer requirements.
+Kubernetes uses a special-purpose authorization mode called [Node Authorizer](https://kubernetes.io/docs/reference/access-authn-authz/node/), that specifically authorizes API requests made by [Kubelets](https://kubernetes.io/docs/concepts/overview/components/#kubelet). In order to be authorized by the Node Authorizer, Kubelets must use a credential that identifies them as being in the `system:nodes` group, with a username of `system:node:<nodeName>`. In this section you will create a certificate for each Kubernetes worker node that meets the Node Authorizer requirements.
 
 Generate a certificate and private key for one worker node:
 
@@ -54,7 +54,7 @@ node01.crt
 
 ### The kubelet Kubernetes Configuration File
 
-When generating kubeconfig files for Kubelets the client certificate matching the Kubelet's node name must be used. This will ensure Kubelets are properly authorized by the Kubernetes [Node Authorizer](https://kubernetes.io/docs/admin/authorization/node/).
+When generating kubeconfig files for Kubelets the client certificate matching the Kubelet's node name must be used. This will ensure Kubelets are properly authorized by the Kubernetes [Node Authorizer](https://kubernetes.io/docs/reference/access-authn-authz/node/).
 
 Get the kube-api server load-balancer IP.
 
