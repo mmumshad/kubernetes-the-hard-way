@@ -84,7 +84,7 @@ The `ca.key` is used by the CA for signing certificates. And it should be secure
 
 In this section you will generate client and server certificates for each Kubernetes component and a client certificate for the Kubernetes `admin` user.
 
-To better understand the role of client certificates with respect to users and groups, see [this informative video](https://youtu.be/I-iVrIWfMl8). Note that all the kubenetes services below are themselves cluster users.
+To better understand the role of client certificates with respect to users and groups, see [this informative video](https://youtu.be/I-iVrIWfMl8). Note that all the kubernetes services below are themselves cluster users.
 
 ### The Admin Client Certificate
 
