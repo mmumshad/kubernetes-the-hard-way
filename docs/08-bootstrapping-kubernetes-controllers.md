@@ -285,7 +285,7 @@ CONTROL02=$(dig +short controlplane02)
 LOADBALANCER=$(dig +short loadbalancer)
 ```
 
-Create HAProxy configuration to listen on API server port on this host and distribute requests evently to the two controlplane nodes.
+Create HAProxy configuration to listen on API server port on this host and distribute requests evenly to the two controlplane nodes.
 
 We configure it to operate as a [layer 4](https://en.wikipedia.org/wiki/Transport_layer) loadbalancer (using `mode tcp`), which means it forwards any traffic directly to the backends without doing anything like [SSL offloading](https://ssl2buy.com/wiki/ssl-offloading).
 
