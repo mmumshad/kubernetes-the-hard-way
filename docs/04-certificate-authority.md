@@ -400,6 +400,7 @@ for instance in controlplane01 controlplane02; do
     etcd-server.key etcd-server.crt \
     kube-controller-manager.key kube-controller-manager.crt \
     kube-scheduler.key kube-scheduler.crt \
+    admin.crt admin.key \
     ${instance}:~/
 done
 
