@@ -1,6 +1,9 @@
 # Kubernetes The Hard Way
 
-Updated: March 2024
+|Status||
+|-|-|
+| Last Updated | March 2024 |
+| Last Tested | November 2025 |
 
 This tutorial walks you through setting up Kubernetes the hard way on a local machine using a hypervisor.
 This guide is not for people looking for a fully automated command to bring up a Kubernetes cluster.
