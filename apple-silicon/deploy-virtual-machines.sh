@@ -104,7 +104,7 @@ do
     multipass transfer $hostentries $node:/tmp/
     multipass transfer $SCRIPT_DIR/01-setup-hosts.sh $node:/tmp/
     multipass transfer $SCRIPT_DIR/cert_verify.sh $node:/home/ubuntu/
-    multipass exec $node -- /tmp/01-setup-hosts.sh
+    multipass exec $node --bash -c "chmod +x /tmp/01-setup-hosts.sh && /tmp/01-setup-hosts.sh"
 done
 
 multipass transfer $TOOLS_DIR/approve-csr.sh controlplane01:/home/ubuntu/
