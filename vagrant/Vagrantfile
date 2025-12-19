@@ -5,7 +5,7 @@
 # Larger nodes will be created if you have more.
 RAM_SIZE = 16
 
-# Define how mnay CPU cores you have.
+# Define how many CPU cores you have.
 # More powerful workers will be created if you have more
 CPU_CORES = 8
 
