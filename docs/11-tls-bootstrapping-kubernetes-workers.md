@@ -42,8 +42,8 @@ expected output :
 **kube-controller-manager** - The certificate requests are signed by the kube-controller-manager ultimately. The kube-controller-manager requires the CA Certificate and Key to perform these operations.
 
 ```
-  --cluster-signing-cert-file=/var/lib/kubernetes/ca.crt \\
-  --cluster-signing-key-file=/var/lib/kubernetes/ca.key
+  --cluster-signing-cert-file=/var/lib/kubernetes/pki/ca.crt \\
+  --cluster-signing-key-file=/var/lib/kubernetes/pki/ca.key
 ```
 
 > Note: We have already configured these in lab 8 in this course
