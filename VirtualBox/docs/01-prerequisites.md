@@ -66,7 +66,7 @@ The network used to assign IP addresses to pods is `10.244.0.0/16`.
 
 To change this, open all the `.md` files in the [docs](../../docs/) directory in your favourite IDE and do a global replace on<br>
 `POD_CIDR=10.244.0.0/16`<br>
-with the new CDIR range.  This should not overlap any of the other network settings.
+with the new CIDR range.  This should not overlap any of the other network settings.
 
 #### Service Network
 
@@ -74,7 +74,7 @@ The network used to assign IP addresses to Cluster IP services is `10.96.0.0/16`
 
 To change this, open all the `.md` files in the [docs](../../docs/) directory in your favourite IDE and do a global replace on<br>
 `SERVICE_CIDR=10.96.0.0/16`<br>
-with the new CDIR range.  This should not overlap any of the other network settings.
+with the new CIDR range.  This should not overlap any of the other network settings.
 
 Additionally edit line 164 of [coredns.yaml](../../deployments/coredns.yaml) to set the new DNS service address (should still end with `.10`)
 
