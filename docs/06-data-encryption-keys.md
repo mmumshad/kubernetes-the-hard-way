@@ -20,8 +20,8 @@ Create the `encryption-config.yaml` encryption config file:
 
 ```bash
 cat > encryption-config.yaml <<EOF
-kind: EncryptionConfig
-apiVersion: v1
+kind: EncryptionConfiguration
+apiVersion: apiserver.config.k8s.io/v1
 resources:
   - resources:
       - secrets
@@ -41,6 +41,12 @@ for instance in controlplane01 controlplane02; do
   scp encryption-config.yaml ${instance}:~/
 done
 ```
+
+At this point, the encryption configuration file has been created and copied to all control plane nodes. However, **creating this file alone does not enable encryption at rest**.
+
+The `kube-apiserver` must be configured to use this file by specifying the `--encryption-provider-config` option. When configured, the API server uses the encryption provider to encrypt supported resources, such as Secrets, **before persisting them to etcd**.
+
+We will configure the `kube-apiserver` to use this encryption configuration in the upcoming section, when we create its systemd unit file.
 
 Move `encryption-config.yaml` encryption config file to appropriate directory.
 
